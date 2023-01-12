@@ -8,7 +8,7 @@ GREEN 		= \033[1;3;5;92m
 #----------------------------------------------#
 NAME		= pipex
 CFLAGS		= -Wall -Wextra -Werror
-SRC			= src/pipex.c
+SRC			= main.c pipex_utils.c
 OBJEC		= $(SRC:.c=.o)
 LIBFT		= my_lib/libft.a
 
