@@ -19,6 +19,7 @@
 typedef struct s_pip {
 	int		fd_infile;
 	char	**cmd;
+	char	**path;
 }	t_pip;
 
 int	check(int x, char *file, int line);
