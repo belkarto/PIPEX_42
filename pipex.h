@@ -17,17 +17,10 @@
 # include <errno.h>
 
 typedef struct s_pip {
-	int		fd[2];
-	int		pid;
-	int		pid2;
-	int		fd1;
 	int		fd_infile;
-	int		env_holder;
-	char	*cmd;
-	char	**args;
-	char	**env;
+	char	**cmd;
 }	t_pip;
 
 int	check(int x, char *file, int line);
-
+void	ft_free(char **str);
 #endif
