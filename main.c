@@ -6,7 +6,7 @@
 /*   By: belkarto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 12:40:08 by belkarto          #+#    #+#             */
-/*   Updated: 2023/01/11 12:40:10 by belkarto         ###   ########.fr       */
+/*   Updated: 2023/01/17 14:51:31 by belkarto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "my_lib/libft.h"
@@ -22,9 +22,7 @@ char	***fill_cmd(int len, char **av)
 	cmd = (char ***)ft_calloc(sizeof(char **), len + 1);
 	i = -1;
 	while (++i < len)
-	{
 		cmd[i] = ft_split(av[i], ' ');
-	}
 	return (cmd);
 }
 
@@ -43,9 +41,7 @@ char	*get_cmd_path(char *cmd, char **path)
 	{
 		holder = ft_strjoin(path[i], cmd);
 		if (access(holder, X_OK) != -1)
-		{
 			return (holder);
-		}
 	}
 	ft_printf("command not found:  %s\n", cmd);
 	return (NULL);
