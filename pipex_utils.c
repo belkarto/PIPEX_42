@@ -10,7 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "my_lib/libft.h"
 #include "pipex.h"
+#include <sys/wait.h>
+#include <unistd.h>
 
 int	check(int x, char *file, int line)
 {
@@ -48,4 +51,39 @@ char	**add_slash(char **path)
 		holder[i] = ft_strjoin(path[i], "/");
 	ft_free(path);
 	return (holder);
+}
+
+void	exec_cmd(t_pip pip, char **env,char **argv, int argc)
+{
+	int	pid;
+	int	pid2;
+	
+	check(pipe(pip.fd), __FILE__, __LINE__);
+	pid = check(fork(), __FILE__, __LINE__);
+	if (pid == 0)
+	{
+		//dup2(pip.fd[1], STDOUT_FILENO);
+		close(pip.fd[0]);
+		close(pip.fd[1]);
+		check(execve(pip.path[0], pip.cmd[0], env), __FILE__, __LINE__);
+	}
+	(void)argc;
+	(void)argv;
+	(void)pid2;
+	/* pid2 = check(fork(), __FILE__, __LINE__);
+	if (pid2 == 0)
+	{
+		pip.fd_outfile = check(open(argv[argc - 1], 2 | O_CREAT, 0644), __FILE__, __LINE__);
+		dup2(pip.fd[0], STDIN_FILENO);
+		dup2(pip.fd_outfile, STDOUT_FILENO);
+		close(pip.fd_outfile);
+		close(pip.fd[0]);
+		close(pip.fd[1]);
+		execve(pip.path[1], pip.cmd[1], env);
+
+	}
+	close(pip.fd[0]);
+	close(pip.fd[1]);
+	waitpid(pid, NULL, 0);
+	waitpid(pid2, NULL, 0); */
 }

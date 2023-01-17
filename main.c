@@ -14,26 +14,17 @@
 #include <sys/fcntl.h>
 #include <unistd.h>
 
-//function that check if the cmd exist and initialize path_checker
-/* int	ft_check_cmd(char *cmd, char **env, char *path)
-   {
-   } */
-
-char	**fill_cmd(int len, char **av)
+char	***fill_cmd(int len, char **av)
 {
 	int		i;
-	char	**holder;
-	char	**cmd;
+	char	***cmd;
 
-	cmd = (char **)malloc(sizeof(char *) * len + 1);
+	cmd = (char ***)ft_calloc(sizeof(char **), len + 1);
 	i = -1;
 	while (++i < len)
 	{
-		holder = ft_split(av[i], ' ');
-		cmd[i] = ft_strdup(holder[0]);
-		ft_free(holder);
+		cmd[i] = ft_split(av[i], ' ');
 	}
-	cmd[i] = NULL;
 	return (cmd);
 }
 
@@ -65,7 +56,7 @@ char	*get_cmd_path(char *cmd, char **path)
 // get path is function that help to get each command path and return 
 // 2D arr of paths 
 
-char	**get_path(char **cmd, char **env, int len)
+char	**get_path(char ***cmd, char **env, int len)
 {
 	char	**paths;
 	char	**path;
@@ -75,19 +66,15 @@ char	**get_path(char **cmd, char **env, int len)
 	i = -1;
 	paths = (char **)ft_calloc(sizeof(char *), len + 1);
 	while (env[++i])
-	{
 		if (ft_strncmp("PATH=", env[i], 5) == 0)
 			tmp_path = env[i] + 5;
-	}
 	path = ft_split(tmp_path, ':');
 	path = add_slash(path);
 	i = -1;
 	while (++i < len)
-	{	
-		paths[i] = get_cmd_path(cmd[i], path);
-		ft_printf("%s\n", paths[i]);
-	}
-		i = -1;
+		paths[i] = get_cmd_path(cmd[i][0], path);
+	ft_free(path);
+	i = -1;
 	while (++i < len)
 		if (paths[i] == NULL)
 			exit (2);
@@ -96,8 +83,16 @@ char	**get_path(char **cmd, char **env, int len)
 
 void	get_cmd(t_pip *pip, int ac, char **av, char **env)
 {
+	int	i;
+
 	pip->cmd = fill_cmd(ac - 3, av + 2);
 	pip->path = get_path(pip->cmd, env, (ac - 3));
+	i = -1;
+	while (pip->cmd[++i])
+	{
+		if (ft_strlen(pip->cmd[i][0]) == 0)
+			exit (3);
+	}
 }
 
 int	main(int argc, char *argv[], char **envp)
@@ -118,5 +113,6 @@ int	main(int argc, char *argv[], char **envp)
 	}
 	pip.fd_infile = check(open(argv[1], O_RDONLY), __FILE__, __LINE__);
 	get_cmd(&pip, argc, argv, envp);
+	exec_cmd(pip, envp, argv, argc);
 	return (0);
 }
