@@ -64,11 +64,10 @@ void	exec_cmd(t_pip pip, char **env, char **argv, int argc)
 		first_child_p(pip, env);
 	pid2 = check(fork(), __FILE__, __LINE__);
 	if (pid2 == 0)
-	{
 		second_child_pros(pip, env, argc, argv);
-	}
 	close(pip.fd[0]);
 	close(pip.fd[1]);
+	close(pip.fd_infile);
 	waitpid(pid, NULL, 0);
 	waitpid(pid2, NULL, 0);
 }
