@@ -28,4 +28,6 @@ int		check(int x, char *file, int line);
 void	ft_free(char **str);
 char	**add_slash(char **path);
 void	exec_cmd(t_pip pip, char **env, char **argv, int argc);
+void	first_child_p(t_pip pip, char **env);
+void	second_child_pros(t_pip pip, char **env, int argc, char **argv);
 #endif

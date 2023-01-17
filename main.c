@@ -34,14 +34,14 @@ char	*get_cmd_path(char *cmd, char **path)
 	i = -1;
 	if (access(cmd, X_OK) != -1)
 	{
-		holder = cmd;
-		return (holder);
+		return (cmd);
 	}
 	while (path[++i])
 	{
 		holder = ft_strjoin(path[i], cmd);
 		if (access(holder, X_OK) != -1)
 			return (holder);
+		free(holder);
 	}
 	ft_printf("command not found:  %s\n", cmd);
 	return (NULL);

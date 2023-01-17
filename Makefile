@@ -9,7 +9,7 @@ GREEN 		= \033[1;3;5;92m
 NAME		= pipex
 CFLAGS		= -Wall -Wextra -Werror 
 #-g -fsanitize=address
-SRC			= main.c pipex_utils.c
+SRC			= main.c pipex_utils.c pipex_utils2.c
 OBJEC		= $(SRC:.c=.o)
 LIBFT		= my_lib/libft.a
 
