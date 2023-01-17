@@ -31,3 +31,21 @@ void	ft_free(char **str)
 		free(str[i++]);
 	free(str);
 }
+
+char	**add_slash(char **path)
+{
+	int		i;
+	char	**holder;
+
+	i = 0;
+	if (path == NULL)
+		return (NULL);
+	while (path[i])
+		i++;
+	holder = (char **)ft_calloc(i + 1, sizeof(char **));
+	i = -1;
+	while (path[++i])
+		holder[i] = ft_strjoin(path[i], "/");
+	ft_free(path);
+	return (holder);
+}

@@ -16,8 +16,8 @@
 
 //function that check if the cmd exist and initialize path_checker
 /* int	ft_check_cmd(char *cmd, char **env, char *path)
-{
-} */
+   {
+   } */
 
 char	**fill_cmd(int len, char **av)
 {
@@ -27,7 +27,7 @@ char	**fill_cmd(int len, char **av)
 
 	cmd = (char **)malloc(sizeof(char *) * len + 1);
 	i = -1;
-	while(++i < len)
+	while (++i < len)
 	{
 		holder = ft_split(av[i], ' ');
 		cmd[i] = ft_strdup(holder[0]);
@@ -37,68 +37,61 @@ char	**fill_cmd(int len, char **av)
 	return (cmd);
 }
 
-int	check_pwd(char *cmd, char *pwd, char *holder)
+char	*get_cmd_path(char *cmd, char **path)
 {
-	pwd = ft_strjoin_gnl(pwd, "/");
-	holder = pwd;
-	pwd = ft_strjoin_gnl(pwd, cmd);
-	ft_printf("%s \n", pwd);
-	(void)holder;
-	return (0);
-}
-
-int	env_checker(char *cmd, char *env_path, char *holder)
-{
-	(void)cmd;
-		(void)env_path;
-		(void)holder;
-	return (0);
-}
-
-void	ft_check_path(char **cmd, char **path, char *pwd, char *env_path)
-{
-	int	i;
-	char	*path_holder;
+	char	*holder;
+	int		i;
 
 	i = -1;
-	path_holder = NULL;
-	ft_printf("%s\n%s", pwd, env_path);
-	while (cmd[++i])
+	if (access(cmd, X_OK) != -1)
 	{
-		if (check_pwd(cmd[i], pwd, path_holder) != 0
-			&& env_checker(cmd[i], env_path, path_holder) != 0)
+		holder = cmd;
+		return (holder);
+	}
+	while (path[++i])
+	{
+		holder = ft_strjoin(path[i], cmd);
+		if (access(holder, X_OK) != -1)
 		{
-			path[i] = path_holder;
-		}
-		else
-		{
-			return ;
+			return (holder);
 		}
 	}
+	ft_printf("command not found:  %s\n", cmd);
+	return (NULL);
 }
+
+// path holdes each command path dependes on its index
+// like cmd[0] its path is path[0] and so on
+// get path is function that help to get each command path and return 
+// 2D arr of paths 
 
 char	**get_path(char **cmd, char **env, int len)
 {
+	char	**paths;
 	char	**path;
-	char	*pwd;
 	char	*tmp_path;
 	int		i;
 
 	i = -1;
-	path = (char **)ft_calloc(sizeof(char *), len + 1);
+	paths = (char **)ft_calloc(sizeof(char *), len + 1);
 	while (env[++i])
 	{
-		if (ft_strncmp("PATH=", env[i], 5) == 0
-			|| ft_strncmp("PWD=", env[i], 4) == 0)
-		{
-			if (ft_strncmp("PATH=", env[i], 5) == 0)
-				tmp_path = ft_strdup(env[i] + 5);
-			if (ft_strncmp("PWD=", env[i], 4) == 0)
-				pwd = ft_strdup(env[i] + 4);
-		}
+		if (ft_strncmp("PATH=", env[i], 5) == 0)
+			tmp_path = env[i] + 5;
 	}
-	ft_check_path(cmd, path, pwd, tmp_path);
-	return (path);
+	path = ft_split(tmp_path, ':');
+	path = add_slash(path);
+	i = -1;
+	while (++i < len)
+	{	
+		paths[i] = get_cmd_path(cmd[i], path);
+		ft_printf("%s\n", paths[i]);
+	}
+		i = -1;
+	while (++i < len)
+		if (paths[i] == NULL)
+			exit (2);
+	return (paths);
 }
 
 void	get_cmd(t_pip *pip, int ac, char **av, char **env)

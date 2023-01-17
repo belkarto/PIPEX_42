@@ -22,6 +22,7 @@ typedef struct s_pip {
 	char	**path;
 }	t_pip;
 
-int	check(int x, char *file, int line);
+int		check(int x, char *file, int line);
 void	ft_free(char **str);
+char	**add_slash(char **path);
 #endif
