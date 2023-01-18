@@ -6,13 +6,15 @@
 /*   By: belkarto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 12:40:08 by belkarto          #+#    #+#             */
-/*   Updated: 2023/01/17 14:51:31 by belkarto         ###   ########.fr       */
+/*   Updated: 2023/01/18 07:47:39 by belkarto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "my_lib/libft.h"
 #include "pipex.h"
-#include <sys/fcntl.h>
-#include <unistd.h>
+
+// in pipe we us array of 2
+// let's call it fd[2]
+// fd[0] is the read end of pipe
+// fd[1] is the write end of pipe
 
 char	***fill_cmd(int len, char **av)
 {

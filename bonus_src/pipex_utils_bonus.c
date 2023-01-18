@@ -1,19 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   pipex_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: belkarto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/15 01:22:57 by belkarto          #+#    #+#             */
-/*   Updated: 2023/01/17 15:37:07 by belkarto         ###   ########.fr       */
+/*   Created: 2023/01/18 07:40:22 by belkarto          #+#    #+#             */
+/*   Updated: 2023/01/18 08:00:51 by belkarto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "my_lib/libft.h"
-#include "pipex.h"
-#include <sys/wait.h>
-#include <unistd.h>
+#include "pipex_bonus.h"
+
 
 int	check(int x, char *file, int line)
 {
@@ -64,7 +62,7 @@ void	exec_cmd(t_pip pip, char **env, char **argv, int argc)
 		first_child_p(pip, env);
 	pid2 = check(fork(), __FILE__, __LINE__);
 	if (pid2 == 0)
-		second_child_pros(pip, env, argc, argv);
+		last_child_p(pip, env, argc, argv);
 	close(pip.fd[0]);
 	close(pip.fd[1]);
 	close(pip.fd_infile);
