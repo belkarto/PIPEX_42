@@ -6,7 +6,7 @@
 /*   By: belkarto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 12:40:08 by belkarto          #+#    #+#             */
-/*   Updated: 2023/01/18 07:47:39 by belkarto         ###   ########.fr       */
+/*   Updated: 2023/01/19 13:20:31 by belkarto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -20,11 +20,24 @@ char	***fill_cmd(int len, char **av)
 {
 	int		i;
 	char	***cmd;
+	int		tracker;
 
+	tracker = 0;
 	cmd = (char ***)ft_calloc(sizeof(char **), len + 1);
 	i = -1;
 	while (++i < len)
 		cmd[i] = ft_split(av[i], ' ');
+	i = -1;
+	while (++i < len)
+	{
+		if (cmd[i][0][0] == '/')
+		{
+			tracker = 1;
+			ft_printf("no such file or directory : %s\n", cmd[i][0]);
+		}
+	}
+	if (tracker == 1)
+		exit(127);
 	return (cmd);
 }
 

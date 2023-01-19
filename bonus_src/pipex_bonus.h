@@ -6,7 +6,7 @@
 /*   By: belkarto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 21:02:43 by belkarto          #+#    #+#             */
-/*   Updated: 2023/01/19 06:47:06 by belkarto         ###   ########.fr       */
+/*   Updated: 2023/01/19 11:23:56 by belkarto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 typedef struct s_pip {
 	int		fd[2];
+	int		fd_pip[2];
+	int		fd_pip2[2];
 	int		fd_infile;
 	int		fd_outfile;
 	char	***cmd;
