@@ -6,10 +6,9 @@
 /*   By: belkarto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 01:22:57 by belkarto          #+#    #+#             */
-/*   Updated: 2023/01/18 07:30:26 by belkarto         ###   ########.fr       */
+/*   Updated: 2023/01/19 04:54:59 by belkarto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "pipex.h"
 
 int	check(int x, char *file, int line)

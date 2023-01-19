@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: belkarto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/18 07:42:21 by belkarto          #+#    #+#             */
-/*   Updated: 2023/01/18 08:11:17 by belkarto         ###   ########.fr       */
+/*   Created: 2023/01/17 16:37:04 by belkarto          #+#    #+#             */
+/*   Updated: 2023/01/19 08:32:35 by belkarto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "pipex_bonus.h"
 
 void	first_child_p(t_pip pip, char **env)
@@ -21,7 +22,7 @@ void	first_child_p(t_pip pip, char **env)
 	check(execve(pip.path[0], pip.cmd[0], env), __FILE__, __LINE__);
 }
 
-void	last_child_p(t_pip pip, char **env, int argc, char **argv)
+void	second_child_pros(t_pip pip, char **env, int argc, char **argv)
 {
 	close(pip.fd[1]);
 	pip.fd_outfile = check(open(argv[argc - 1], 2 | O_CREAT, 0644),
@@ -31,12 +32,4 @@ void	last_child_p(t_pip pip, char **env, int argc, char **argv)
 	dup2(pip.fd_outfile, STDOUT_FILENO);
 	close(pip.fd_outfile);
 	execve(pip.path[1], pip.cmd[1], env);
-}
-
-void	exec_multi_cmd(t_pip pip, char **env, char **argv, int argc)
-{
-	(void)pip;
-	(void)env;
-	(void)argv;
-	(void)argc;
 }

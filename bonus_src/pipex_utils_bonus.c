@@ -5,13 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: belkarto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/18 07:40:22 by belkarto          #+#    #+#             */
-/*   Updated: 2023/01/18 08:00:51 by belkarto         ###   ########.fr       */
+/*   Created: 2023/01/15 01:22:57 by belkarto          #+#    #+#             */
+/*   Updated: 2023/01/19 09:26:13 by belkarto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "pipex_bonus.h"
-
+#include <sys/wait.h>
+#include <unistd.h>
 
 int	check(int x, char *file, int line)
 {
@@ -51,6 +51,36 @@ char	**add_slash(char **path)
 	return (holder);
 }
 
+void	child(t_pip pip, char **env, int ind)
+{
+	int	out;
+
+	out = dup(pip.fd[1]);
+	dup2(pip.fd[0], STDIN_FILENO);
+	close(pip.fd[0]);
+	dup2(out, STDOUT_FILENO);
+	close(out);
+	close(pip.fd[1]);
+	close(pip.fd_infile);
+	execve(pip.path[ind +1], pip.cmd[ind + 1], env);
+}
+
+void	mid_proc(t_pip pip, char **env, int ac)
+{
+	int	i;
+	int	pid;
+
+	i = -1;
+	ac -= 5;
+	while (++i < ac)
+	{
+		pid = check(fork(), __FILE__, __LINE__);
+		if (pid == 0)
+			child(pip, env, i);
+		waitpid(pid, NULL, 0);
+	}
+}
+
 void	exec_cmd(t_pip pip, char **env, char **argv, int argc)
 {
 	int	pid;
@@ -62,7 +92,27 @@ void	exec_cmd(t_pip pip, char **env, char **argv, int argc)
 		first_child_p(pip, env);
 	pid2 = check(fork(), __FILE__, __LINE__);
 	if (pid2 == 0)
-		last_child_p(pip, env, argc, argv);
+		second_child_pros(pip, env, argc, argv);
+	close(pip.fd[0]);
+	close(pip.fd[1]);
+	close(pip.fd_infile);
+	waitpid(pid, NULL, 0);
+	waitpid(pid2, NULL, 0);
+}
+
+void	exec_multi_cmd(t_pip pip, char **env, char **argv, int argc)
+{
+	int	pid;
+	int	pid2;
+
+	check(pipe(pip.fd), __FILE__, __LINE__);
+	pid = check(fork(), __FILE__, __LINE__);
+	if (pid == 0)
+		first_child_p(pip, env);
+	mid_proc(pip, env, argc);
+	pid2 = check(fork(), __FILE__, __LINE__);
+	if (pid2 == 0)
+		second_child_pros(pip, env, argc, argv);
 	close(pip.fd[0]);
 	close(pip.fd[1]);
 	close(pip.fd_infile);
