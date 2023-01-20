@@ -20,24 +20,12 @@ char	***fill_cmd(int len, char **av)
 {
 	int		i;
 	char	***cmd;
-	int		tracker;
 
-	tracker = 0;
 	cmd = (char ***)ft_calloc(sizeof(char **), len + 1);
 	i = -1;
 	while (++i < len)
 		cmd[i] = ft_split(av[i], ' ');
-	i = -1;
-	while (++i < len)
-	{
-		if (ft_strlen(cmd[i][0]) != 0 && cmd[i][0][0] == '/')
-		{
-			tracker = 1;
-			ft_printf("no such file or directory : %s\n", cmd[i][0]);
-		}
-	}
-	if (tracker == 1)
-		exit(127);
+	
 	return (cmd);
 }
 
