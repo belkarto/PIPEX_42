@@ -6,7 +6,7 @@
 /*   By: belkarto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 12:40:08 by belkarto          #+#    #+#             */
-/*   Updated: 2023/01/19 13:20:31 by belkarto         ###   ########.fr       */
+/*   Updated: 2023/01/20 14:11:29 by belkarto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -30,7 +30,7 @@ char	***fill_cmd(int len, char **av)
 	i = -1;
 	while (++i < len)
 	{
-		if (cmd[i][0][0] == '/')
+		if (ft_strlen(cmd[i][0]) != 0 && cmd[i][0][0] == '/')
 		{
 			tracker = 1;
 			ft_printf("no such file or directory : %s\n", cmd[i][0]);
@@ -58,7 +58,10 @@ char	*get_cmd_path(char *cmd, char **path)
 			return (holder);
 		free(holder);
 	}
-	ft_printf("command not found:  %s\n", cmd);
+	if (cmd)
+		ft_putstr_fd("command not found: %s\n", 2);
+	else
+		ft_putstr_fd("permission denied:\n", 2);
 	return (NULL);
 }
 
@@ -88,7 +91,7 @@ char	**get_path(char ***cmd, char **env, int len)
 	i = -1;
 	while (++i < len)
 		if (paths[i] == NULL)
-			exit (2);
+			exit (126);
 	return (paths);
 }
 
@@ -102,7 +105,7 @@ void	get_cmd(t_pip *pip, int ac, char **av, char **env)
 	while (pip->cmd[++i])
 	{
 		if (ft_strlen(pip->cmd[i][0]) == 0)
-			exit (3);
+			exit (126);
 	}
 }
 
@@ -112,14 +115,14 @@ int	main(int argc, char *argv[], char **envp)
 
 	if (argc < 5)
 	{
-		ft_printf("not enough argument :\n");
-		ft_printf("\tUSAGE\t: %s infile cmd1 cmd2 outfile\n", argv[0]);
+		ft_putstr_fd("not enough argument :\n", 2);
+		ft_putstr_fd("\tUSAGE\t: ./pipex infile cmd1 cmd2 outfile\n", 2);
 		return (2);
 	}
 	if (argc > 5)
 	{
-		ft_printf("too many argument :\n");
-		ft_printf("\tUSAGE\t: %s infile cmd1 cmd2 outfile\n", argv[0]);
+		ft_putstr_fd("too many argument :\n", 2);
+		ft_putstr_fd("\tUSAGE\t: ./pipex infile cmd1 cmd2 outfile\n", 2);
 		return (2);
 	}
 	pip.fd_infile = check(open(argv[1], O_RDONLY), __FILE__, __LINE__);

@@ -6,7 +6,7 @@
 /*   By: belkarto <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 01:22:57 by belkarto          #+#    #+#             */
-/*   Updated: 2023/01/19 04:54:59 by belkarto         ###   ########.fr       */
+/*   Updated: 2023/01/20 14:13:53 by belkarto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -53,6 +53,7 @@ void	exec_cmd(t_pip pip, char **env, char **argv, int argc)
 {
 	int	pid;
 	int	pid2;
+	int	statu;
 
 	check(pipe(pip.fd), __FILE__, __LINE__);
 	pid = check(fork(), __FILE__, __LINE__);
@@ -64,6 +65,7 @@ void	exec_cmd(t_pip pip, char **env, char **argv, int argc)
 	close(pip.fd[0]);
 	close(pip.fd[1]);
 	close(pip.fd_infile);
-	waitpid(pid, NULL, 0);
-	waitpid(pid2, NULL, 0);
+	waitpid(pid, &statu, 0);
+	waitpid(pid2, &statu, 0);
+	exit(statu);
 }
